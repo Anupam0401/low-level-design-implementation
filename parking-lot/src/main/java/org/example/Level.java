@@ -13,10 +13,8 @@ public class Level {
     public Level(int floor, int numberOfSpots) {
         this.floor = floor;
         parkingSpots = new ArrayList<>(numberOfSpots);
-        // Assign spots in ration of 50:40:10 for motorcycle, cars and trucks
         int motorcycleSpots = numberOfSpots * 50 / 100;
         int carSpots = numberOfSpots * 40 / 100;
-        int truckSpots = numberOfSpots - motorcycleSpots - carSpots;
 
         for(int i = 0; i < motorcycleSpots; i++) {
             parkingSpots.add(new ParkingSpot(i, VehicleType.MOTORCYCLE));
@@ -55,4 +53,7 @@ public class Level {
         }
     }
 
+    public List<ParkingSpot> getParkingSpots() {
+        return parkingSpots;
+    }
 }

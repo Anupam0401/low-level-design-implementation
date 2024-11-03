@@ -51,4 +51,29 @@ public class ParkingLot {
             level.displayAvailablity();
         }
     }
+
+    public int getParkingSpot(Vehicle vehicle) {
+        for(Level level : levels) {
+            for(ParkingSpot spot : level.getParkingSpots()) {
+                if(spot.getParkedVehicle() == vehicle) {
+                    return spot.getSpotNumber();
+                }
+            }
+        }
+        System.out.println("Vehicle not found in parking lot");
+        return -1;
+    }
+
+    public boolean enquireAvailabilityForVehicle(Vehicle vehicle) {
+        for(Level level : levels) {
+            for(ParkingSpot spot : level.getParkingSpots()) {
+                if(spot.isAvailable() && spot.getVehicleType() == vehicle.getType()) {
+                    System.out.println("Spot available for vehicle " + vehicle.getType());
+                    return true;
+                }
+            }
+        }
+        System.out.println("No spot available for vehicle");
+        return false;
+    }
 }
