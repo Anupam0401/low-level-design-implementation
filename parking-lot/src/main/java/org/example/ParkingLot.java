@@ -14,19 +14,19 @@ public class ParkingLot {
     }
 
     public static synchronized ParkingLot getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ParkingLot();
         }
         return instance;
     }
 
-    public void addLevel(Level level){
+    public void addLevel(Level level) {
         levels.add(level);
     }
 
     public boolean parkVehicle(Vehicle vehicle) {
-        for(Level level : levels) {
-            if(level.parkVehicle(vehicle)) {
+        for (Level level : levels) {
+            if (level.parkVehicle(vehicle)) {
                 System.out.println("Vehicle parked successfully");
                 return true;
             }
@@ -36,8 +36,8 @@ public class ParkingLot {
     }
 
     public boolean removeVehicle(Vehicle vehicle) {
-        for(Level level : levels) {
-            if(level.removeVehicle(vehicle)) {
+        for (Level level : levels) {
+            if (level.removeVehicle(vehicle)) {
                 System.out.println("Vehicle removed successfully");
                 return true;
             }
@@ -47,15 +47,15 @@ public class ParkingLot {
     }
 
     public void displayAvailablity() {
-        for(Level level : levels) {
+        for (Level level : levels) {
             level.displayAvailablity();
         }
     }
 
     public int getParkingSpot(Vehicle vehicle) {
-        for(Level level : levels) {
-            for(ParkingSpot spot : level.getParkingSpots()) {
-                if(spot.getParkedVehicle() == vehicle) {
+        for (Level level : levels) {
+            for (ParkingSpot spot : level.getParkingSpots()) {
+                if (spot.getParkedVehicle() == vehicle) {
                     return spot.getSpotNumber();
                 }
             }
@@ -65,9 +65,9 @@ public class ParkingLot {
     }
 
     public boolean enquireAvailabilityForVehicle(Vehicle vehicle) {
-        for(Level level : levels) {
-            for(ParkingSpot spot : level.getParkingSpots()) {
-                if(spot.isAvailable() && spot.getVehicleType() == vehicle.getType()) {
+        for (Level level : levels) {
+            for (ParkingSpot spot : level.getParkingSpots()) {
+                if (spot.isAvailable() && spot.getVehicleType() == vehicle.getType()) {
                     System.out.println("Spot available for vehicle " + vehicle.getType());
                     return true;
                 }

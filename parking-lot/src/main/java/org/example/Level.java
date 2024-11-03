@@ -16,20 +16,20 @@ public class Level {
         int motorcycleSpots = numberOfSpots * 50 / 100;
         int carSpots = numberOfSpots * 40 / 100;
 
-        for(int i = 0; i < motorcycleSpots; i++) {
+        for (int i = 0; i < motorcycleSpots; i++) {
             parkingSpots.add(new ParkingSpot(i, VehicleType.MOTORCYCLE));
         }
-        for(int i = motorcycleSpots; i < motorcycleSpots + carSpots; i++) {
+        for (int i = motorcycleSpots; i < motorcycleSpots + carSpots; i++) {
             parkingSpots.add(new ParkingSpot(i, VehicleType.CAR));
         }
-        for(int i = motorcycleSpots + carSpots; i < numberOfSpots; i++) {
+        for (int i = motorcycleSpots + carSpots; i < numberOfSpots; i++) {
             parkingSpots.add(new ParkingSpot(i, VehicleType.TRUCK));
         }
     }
 
     public synchronized boolean parkVehicle(Vehicle vehicle) {
-        for(ParkingSpot spot : parkingSpots) {
-            if(spot.isAvailable() && spot.getVehicleType() == vehicle.getType()) {
+        for (ParkingSpot spot : parkingSpots) {
+            if (spot.isAvailable() && spot.getVehicleType() == vehicle.getType()) {
                 spot.parkVehicle(vehicle);
                 return true;
             }
@@ -38,8 +38,8 @@ public class Level {
     }
 
     public synchronized boolean removeVehicle(Vehicle vehicle) {
-        for(ParkingSpot spot : parkingSpots) {
-            if(!spot.isAvailable() && spot.getParkedVehicle() == vehicle) {
+        for (ParkingSpot spot : parkingSpots) {
+            if (!spot.isAvailable() && spot.getParkedVehicle() == vehicle) {
                 spot.removeVehicle();
                 return true;
             }
@@ -48,7 +48,7 @@ public class Level {
     }
 
     public void displayAvailablity() {
-        for(ParkingSpot spot : parkingSpots) {
+        for (ParkingSpot spot : parkingSpots) {
             System.out.println("Spot number: " + spot.getSpotNumber() + " is available: " + spot.isAvailable());
         }
     }

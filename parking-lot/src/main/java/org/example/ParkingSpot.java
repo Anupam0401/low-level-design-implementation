@@ -18,10 +18,9 @@ public class ParkingSpot {
     }
 
     public synchronized void parkVehicle(Vehicle vehicle) {
-        if(isAvailable() && vehicle.getType() == vehicleType) {
+        if (isAvailable() && vehicle.getType() == vehicleType) {
             parkedVehicle = vehicle;
-        }
-        else {
+        } else {
             throw new IllegalArgumentException("Invalid vehicle type or spot is already occupied");
         }
     }
