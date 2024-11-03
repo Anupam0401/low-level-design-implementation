@@ -16,18 +16,16 @@ public class ParkingLotApplication {
         Vehicle motorcycle = new Motorcycle("DEF789");
 
         // Park vehicles
+        System.out.println(parkingLot.enquireAvailabilityForVehicle(car));
         parkingLot.parkVehicle(car);
         parkingLot.parkVehicle(truck);
+        System.out.println(parkingLot.enquireAvailabilityForVehicle(motorcycle));
         parkingLot.parkVehicle(motorcycle);
 
-        // Display availability
-        parkingLot.displayAvailablity();
-
-        // Unpark vehicle
         parkingLot.removeVehicle(motorcycle);
 
-        // Display updated availability
-        parkingLot.displayAvailablity();
-
+        System.out.println(parkingLot.getParkingSpot(car));
+        System.out.println(parkingLot.getParkingSpot(truck));
+        System.out.println(parkingLot.getParkingSpot(motorcycle));
     }
 }
