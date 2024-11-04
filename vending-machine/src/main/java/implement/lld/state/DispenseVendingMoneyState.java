@@ -23,11 +23,9 @@ public class DispenseVendingMoneyState implements IVendingMoneyState {
 
     @Override
     public void dispenseProduct() {
-        vendingMachine.resetSelectedProduct();
         vendingMachine.getInventoryManager().decreaseProductQuantity(vendingMachine.getSelectedProduct());
-        vendingMachine.resetPayment();
-        vendingMachine.setVendingMoneyState(vendingMachine.getReturnMoneyVendingMoneyState());
-        System.out.println("Product " + vendingMachine.getSelectedProduct() + "dispensed!");
+        vendingMachine.setVendingMoneyState(getNextState());
+        System.out.println("Product " + vendingMachine.getSelectedProduct() + " dispensed!");
     }
 
     @Override

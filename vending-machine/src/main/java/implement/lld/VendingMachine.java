@@ -85,15 +85,31 @@ public class VendingMachine {
         return inventoryManager;
     }
 
-    public void transitionToNextState() {
-        this.vendingMoneyState = vendingMoneyState.getNextState();
-    }
-
     public void resetPayment() {
         this.currentPayment = 0.0;
     }
 
     public void resetSelectedProduct() {
         this.selectedProduct = null;
+    }
+
+    public void selectProduct(Product product) {
+        vendingMoneyState.selectProduct(product);
+    }
+
+    public void insertMoney(int quantity, String denomination) {
+        vendingMoneyState.insertMoney(quantity, denomination);
+    }
+
+    public void dispenseProduct() {
+        vendingMoneyState.dispenseProduct();
+    }
+
+    public void returnChange() {
+        vendingMoneyState.returnChange();
+    }
+
+    public void cancelTransaction() {
+        vendingMoneyState.cancelTransaction();
     }
 }
