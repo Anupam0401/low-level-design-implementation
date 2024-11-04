@@ -30,7 +30,7 @@ public enum Denomination {
 
     public static Denomination getValue(String denomination) {
         try {
-            return Denomination.valueOf(denomination.toLowerCase());
+            return Denomination.valueOf(denomination.toUpperCase());
         } catch (IllegalArgumentException e) {
             throw new UnknownDenominationException("Unknown denomination: " + denomination);
         }

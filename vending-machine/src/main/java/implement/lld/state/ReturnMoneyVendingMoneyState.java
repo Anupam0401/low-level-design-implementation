@@ -45,7 +45,7 @@ public class ReturnMoneyVendingMoneyState implements IVendingMoneyState {
         }
         vendingMachine.resetPayment();
         vendingMachine.resetSelectedProduct();
-        vendingMachine.setVendingMoneyState(vendingMachine.getIdleVendingMoneyState());
+        vendingMachine.setVendingMoneyState(getNextState());
     }
 
     @Override
