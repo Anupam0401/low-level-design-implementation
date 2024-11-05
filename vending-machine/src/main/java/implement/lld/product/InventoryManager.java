@@ -40,4 +40,11 @@ public class InventoryManager {
         }
         throw new InvalidProductException("Product " + productName + " is not available");
     }
+
+    public void showAllAvailableProducts() {
+        HashMap<Product, Integer> products = inventory.getAllAvailableProducts();
+        for (Product product : products.keySet()) {
+            System.out.println(product.getName() + " : " + products.get(product));
+        }
+    }
 }

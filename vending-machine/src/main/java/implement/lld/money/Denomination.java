@@ -35,4 +35,22 @@ public enum Denomination {
             throw new UnknownDenominationException("Unknown denomination: " + denomination);
         }
     }
+
+    public static Denomination fromValue(double value) {
+        for (Denomination denomination : Denomination.values()) {
+            if (denomination.getDenominationValue() == value) {
+                return denomination;
+            }
+        }
+        throw new UnknownDenominationException("Unknown denomination value: " + value);
+    }
+
+    public static int[] getAllValuesInCents() {
+        Denomination[] denominations = Denomination.values();
+        int[] values = new int[denominations.length];
+        for (int i = 0; i < denominations.length; i++) {
+            values[i] = (int) (denominations[i].getDenominationValue() * 100);
+        }
+        return values;
+    }
 }

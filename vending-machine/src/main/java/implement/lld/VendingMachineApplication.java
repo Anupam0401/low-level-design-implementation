@@ -15,9 +15,14 @@ public class VendingMachineApplication {
         vendingMachine.getInventoryManager().addProduct(new Product("DairyMilk", 100), 5);
 
         // start vending machine
-        vendingMachine.selectProduct(new Product("Coke", 1.25));
-        vendingMachine.insertMoney(2, Denomination.ONE.name());
+        vendingMachine.selectProduct(new Product("Lays", 1));
+        vendingMachine.insertMoney(1, Denomination.ONE);
         vendingMachine.dispenseProduct();
         vendingMachine.returnChange();
+
+        vendingMachine.getInventoryManager().showAllAvailableProducts();
+
+//        List<Money> moneyList = MoneyFactory.calculateChange(10, 1.25);
+//        moneyList.forEach(System.out::println);
     }
 }

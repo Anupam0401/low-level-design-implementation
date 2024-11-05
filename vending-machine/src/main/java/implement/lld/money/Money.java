@@ -27,4 +27,13 @@ public abstract class Money {
     public MoneyType getMoneyType() {
         return moneyType;
     }
+
+    @Override
+    public String toString() {
+        return "Money{" +
+            "quantity=" + quantity +
+            ", denomination=" + denomination +
+            ", moneyType=" + moneyType +
+            '}';
+    }
 }

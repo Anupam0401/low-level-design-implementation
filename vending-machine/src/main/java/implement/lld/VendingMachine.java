@@ -1,5 +1,6 @@
 package implement.lld;
 
+import implement.lld.money.Denomination;
 import implement.lld.product.Inventory;
 import implement.lld.product.InventoryManager;
 import implement.lld.product.Product;
@@ -97,7 +98,7 @@ public class VendingMachine {
         vendingMoneyState.selectProduct(product);
     }
 
-    public void insertMoney(int quantity, String denomination) {
+    public void insertMoney(int quantity, Denomination denomination) {
         vendingMoneyState.insertMoney(quantity, denomination);
     }
 

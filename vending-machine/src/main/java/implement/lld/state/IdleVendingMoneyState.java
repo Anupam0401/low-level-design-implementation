@@ -2,6 +2,7 @@ package implement.lld.state;
 
 import implement.lld.VendingMachine;
 import implement.lld.exception.InvalidInputException;
+import implement.lld.money.Denomination;
 import implement.lld.product.Product;
 
 public class IdleVendingMoneyState implements IVendingMoneyState {
@@ -24,7 +25,7 @@ public class IdleVendingMoneyState implements IVendingMoneyState {
     }
 
     @Override
-    public void insertMoney(int quantity, String denomination) {
+    public void insertMoney(int quantity, Denomination denomination) {
         System.out.println("Please select a product first");
     }
 
