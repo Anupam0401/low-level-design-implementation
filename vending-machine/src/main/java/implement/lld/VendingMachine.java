@@ -94,8 +94,8 @@ public class VendingMachine {
         this.selectedProduct = null;
     }
 
-    public void selectProduct(Product product) {
-        vendingMoneyState.selectProduct(product);
+    public void selectProduct(String productName) {
+        vendingMoneyState.selectProduct(productName);
     }
 
     public void insertMoney(int quantity, Denomination denomination) {

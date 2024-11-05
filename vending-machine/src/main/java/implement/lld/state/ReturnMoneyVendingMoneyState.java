@@ -5,7 +5,6 @@ import implement.lld.exception.InvalidInputException;
 import implement.lld.money.Denomination;
 import implement.lld.money.Money;
 import implement.lld.money.MoneyFactory;
-import implement.lld.product.Product;
 
 import java.util.List;
 
@@ -17,7 +16,7 @@ public class ReturnMoneyVendingMoneyState implements IVendingMoneyState {
     }
 
     @Override
-    public void selectProduct(Product product) {
+    public void selectProduct(String productName) {
         throw new InvalidInputException("Please wait... Returning change (if any)");
     }
 

@@ -13,9 +13,10 @@ public class IdleVendingMoneyState implements IVendingMoneyState {
     }
 
     @Override
-    public void selectProduct(Product product) {
-        if (validateAvailability(product)) {
-            vendingMachine.setSelectedProduct(product);
+    public void selectProduct(String productName) {
+        if (validateAvailability(productName)) {
+            Product selectedProduct = vendingMachine.getInventoryManager().getProductByName(productName);
+            vendingMachine.setSelectedProduct(selectedProduct);
             vendingMachine.setCurrentPayment(0);
             vendingMachine.setVendingMoneyState(getNextState());
         } else {
@@ -49,7 +50,10 @@ public class IdleVendingMoneyState implements IVendingMoneyState {
         return vendingMachine.getReadyVendingMoneyState();
     }
 
-    private boolean validateAvailability(Product product) {
-        return vendingMachine.getInventoryManager().getProductQuantity(product.getName()) > 0;
+    private boolean validateAvailability(String productName) {
+        if(!vendingMachine.getInventoryManager().isProductAvailableByName(productName)) {
+            return false;
+        }
+        return vendingMachine.getInventoryManager().getProductQuantity(productName) > 0;
     }
 }

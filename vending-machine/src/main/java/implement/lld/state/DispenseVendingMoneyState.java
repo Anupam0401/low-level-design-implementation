@@ -3,7 +3,6 @@ package implement.lld.state;
 import implement.lld.VendingMachine;
 import implement.lld.exception.InvalidInputException;
 import implement.lld.money.Denomination;
-import implement.lld.product.Product;
 
 public class DispenseVendingMoneyState implements IVendingMoneyState {
     private final VendingMachine vendingMachine;
@@ -13,7 +12,7 @@ public class DispenseVendingMoneyState implements IVendingMoneyState {
     }
 
     @Override
-    public void selectProduct(Product product) {
+    public void selectProduct(String productName) {
         throw new InvalidInputException("Dispensing product. Please wait");
     }
 

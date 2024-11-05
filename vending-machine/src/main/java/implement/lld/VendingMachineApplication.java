@@ -5,24 +5,38 @@ import implement.lld.product.Product;
 
 public class VendingMachineApplication {
     public static void main(String[] args) {
-        VendingMachine vendingMachine = VendingMachine.getInstance();
-        // stock up inventory
-        vendingMachine.getInventoryManager().addProduct(new Product("Coke", 1.25), 10);
-        vendingMachine.getInventoryManager().addProduct(new Product("Pepsi", 1.25), 10);
-        vendingMachine.getInventoryManager().addProduct(new Product("Lays", 1), 10);
-        vendingMachine.getInventoryManager().addProduct(new Product("Doritos", 1), 10);
-        vendingMachine.getInventoryManager().addProduct(new Product("Snickers", 2), 10);
-        vendingMachine.getInventoryManager().addProduct(new Product("DairyMilk", 100), 5);
+        try {
+            VendingMachine vendingMachine = VendingMachine.getInstance();
+            // stock up inventory
+            Product coke = new Product("Coke", 1.25);
+            Product pepsi = new Product("Pepsi", 1.25);
+            Product lays = new Product("Lays", 1);
+            Product doritos = new Product("Doritos", 1);
+            Product snickers = new Product("Snickers", 2);
+            Product dairyMilk = new Product("DairyMilk", 100);
+            vendingMachine.getInventoryManager().addProduct(coke, 10);
+            vendingMachine.getInventoryManager().addProduct(pepsi, 10);
+            vendingMachine.getInventoryManager().addProduct(lays, 10);
+            vendingMachine.getInventoryManager().addProduct(doritos, 10);
+            vendingMachine.getInventoryManager().addProduct(snickers, 10);
+            vendingMachine.getInventoryManager().addProduct(dairyMilk, 5);
 
-        // start vending machine
-        vendingMachine.selectProduct(new Product("Lays", 1));
-        vendingMachine.insertMoney(1, Denomination.ONE);
-        vendingMachine.dispenseProduct();
-        vendingMachine.returnChange();
+            // start vending machine
+            vendingMachine.selectProduct("Pepsi");
+            vendingMachine.insertMoney(2, Denomination.TEN);
+            vendingMachine.dispenseProduct();
+            vendingMachine.returnChange();
+            vendingMachine.getInventoryManager().showAllAvailableProducts();
 
-        vendingMachine.getInventoryManager().showAllAvailableProducts();
+            vendingMachine.getInventoryManager().restockProduct(coke, 10);
+            vendingMachine.getInventoryManager().removeProduct(pepsi);
 
-//        List<Money> moneyList = MoneyFactory.calculateChange(10, 1.25);
-//        moneyList.forEach(System.out::println);
+            vendingMachine.getInventoryManager().showAllAvailableProducts();
+
+            vendingMachine.selectProduct("Pepsi");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }

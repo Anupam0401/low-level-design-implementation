@@ -47,4 +47,12 @@ public class InventoryManager {
             System.out.println(product.getName() + " : " + products.get(product));
         }
     }
+
+    public boolean isProductAvailableByName(String productName) {
+        return inventory.isProductAvailableByName(productName);
+    }
+
+    public Product getProductByName(String productName) {
+        return inventory.findProductByName(productName);
+    }
 }
