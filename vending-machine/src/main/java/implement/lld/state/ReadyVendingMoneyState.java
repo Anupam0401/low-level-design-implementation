@@ -2,6 +2,7 @@ package implement.lld.state;
 
 import implement.lld.VendingMachine;
 import implement.lld.exception.InvalidInputException;
+import implement.lld.money.Denomination;
 import implement.lld.money.Money;
 import implement.lld.money.MoneyFactory;
 import implement.lld.product.Product;
@@ -22,7 +23,7 @@ public class ReadyVendingMoneyState implements IVendingMoneyState {
     }
 
     @Override
-    public void insertMoney(int quantity, String denomination) {
+    public void insertMoney(int quantity, Denomination denomination) {
         Money money = MoneyFactory.createMoney(quantity, denomination);
         vendingMachine.setCurrentPayment(vendingMachine.getCurrentPayment() + money.getMoneyValue());
         vendingMachine.setVendingMoneyState(getNextState());
@@ -30,14 +31,12 @@ public class ReadyVendingMoneyState implements IVendingMoneyState {
 
     @Override
     public void dispenseProduct() {
-        throw new InvalidInputException("Please select a product first");
+        throw new InvalidInputException("Please make payment for the selected product first");
     }
 
     @Override
     public void returnChange() {
-        List<Money> calculatedChange = MoneyFactory.calculateChange(
-            vendingMachine.getCurrentPayment(), vendingMachine.getSelectedProduct().getPrice());
-        vendingMachine.resetPayment();
+       throw new InvalidInputException("Please make payment for the selected product first");
     }
 
     @Override

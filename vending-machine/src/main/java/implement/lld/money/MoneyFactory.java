@@ -8,10 +8,10 @@ import static implement.lld.money.MoneyType.CASH;
 import static implement.lld.money.MoneyType.COIN;
 
 public class MoneyFactory {
-    public static Money createMoney(int quantity, String denomination) {
-        return switch (determineType(Denomination.getValue(denomination))) {
-            case COIN -> new Coin(quantity, Denomination.getValue(denomination));
-            case CASH -> new Cash(quantity, Denomination.getValue(denomination));
+    public static Money createMoney(int quantity, Denomination denomination) {
+        return switch (determineType(denomination)) {
+            case COIN -> new Coin(quantity, denomination);
+            case CASH -> new Cash(quantity, denomination);
         };
     }
 

@@ -2,6 +2,7 @@ package implement.lld.state;
 
 import implement.lld.VendingMachine;
 import implement.lld.exception.InvalidInputException;
+import implement.lld.money.Denomination;
 import implement.lld.money.Money;
 import implement.lld.money.MoneyFactory;
 import implement.lld.product.Product;
@@ -21,7 +22,7 @@ public class ReturnMoneyVendingMoneyState implements IVendingMoneyState {
     }
 
     @Override
-    public void insertMoney(int quantity, String denomination) {
+    public void insertMoney(int quantity, Denomination denomination) {
         throw new InvalidInputException("Please wait... Returning change (if any)");
     }
 
@@ -36,10 +37,9 @@ public class ReturnMoneyVendingMoneyState implements IVendingMoneyState {
             vendingMachine.getCurrentPayment(),
             vendingMachine.getSelectedProduct().getPrice()
         );
-        if (calculatedChange != null && !calculatedChange.isEmpty()) {
+        if (!calculatedChange.isEmpty()) {
             System.out.println("Returning change: ");
             printChangeToReturn(calculatedChange);
-            calculatedChange.forEach(System.out::println);
         } else {
             System.out.println("No change to return!");
         }
@@ -60,8 +60,9 @@ public class ReturnMoneyVendingMoneyState implements IVendingMoneyState {
 
     private void printChangeToReturn(List<Money> calculatedChange) {
         calculatedChange.forEach(money -> {
-            System.out.printf("%s: Denomination: %s, Number: %d\n",
-                money.getMoneyType(), money.getDenomination(), money.getQuantity());
+            System.out.printf("%s %s, Number: %d\n",
+                money.getDenomination(), money.getMoneyType(), money.getQuantity());
         });
+        System.out.println();
     }
 }
