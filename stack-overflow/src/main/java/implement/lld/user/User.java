@@ -1,17 +1,19 @@
-package implement.lld;
+package implement.lld.user;
+
+import implement.lld.IdGenerator;
 
 import java.sql.Timestamp;
 
 public class User {
-    private int id = 1;
+    private final long id;
     private String name;
     private String email;
     private final Timestamp createdAt;
     private Timestamp updatedAt;
     private double reputationScore;
 
-    public User(String name, String email) {
-        this.id = id++;
+    public User(long id, String name, String email) {
+        this.id = id;
         this.name = name;
         this.email = email;
         this.createdAt = new Timestamp(System.currentTimeMillis());
@@ -19,7 +21,7 @@ public class User {
         this.reputationScore = 0;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

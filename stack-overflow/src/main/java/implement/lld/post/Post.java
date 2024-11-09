@@ -1,29 +1,28 @@
 package implement.lld.post;
 
-import implement.lld.User;
+import implement.lld.user.User;
 
 import java.sql.Timestamp;
-import java.util.List;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class Post {
-    private final int id;
-    private String title;
+    private final long id;
     private String content;
-    private int upVoteCount;
-    private int downVoteCount;
+    private final AtomicInteger upVoteCount;
+    private final AtomicInteger downVoteCount;
     private final User owner;
     private final Timestamp createdAt;
     private Timestamp updatedAt;
-    private List<Tag> tags;
+    private final Set<Tag> tags;
 
-    public Post(int id, String title, String content, User owner, List<Tag> tags) {
+    public Post(long id, String content, User owner, Set<Tag> tags) {
         this.id = id;
-        this.title = title;
         this.content = content;
         this.owner = owner;
         this.tags = tags;
-        this.upVoteCount = 0;
-        this.downVoteCount = 0;
+        this.upVoteCount = new AtomicInteger(0);
+        this.downVoteCount = new AtomicInteger(0);
         this.createdAt = new Timestamp(System.currentTimeMillis());
         this.updatedAt = null;
     }
@@ -36,31 +35,23 @@ public abstract class Post {
         return updatedAt;
     }
 
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return tags;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
-
-    public int getId() {
+    public long getId() {
         return id;
-    }
-
-    public String getTitle() {
-        return title;
     }
 
     public String getContent() {
         return content;
     }
 
-    public int getUpVoteCount() {
+    public AtomicInteger getUpVoteCount() {
         return upVoteCount;
     }
 
-    public int getDownVoteCount() {
+    public AtomicInteger getDownVoteCount() {
         return downVoteCount;
     }
 
@@ -68,23 +59,33 @@ public abstract class Post {
         return owner;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
     public void setContent(String content) {
         this.content = content;
     }
 
     public void incrementUpVoteCount() {
-        upVoteCount++;
+        this.upVoteCount.incrementAndGet();
     }
 
     public void incrementDownVoteCount() {
-        downVoteCount++;
+        this.downVoteCount.incrementAndGet();
     }
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public String toString() {
+        return "Post{" +
+                "id=" + id +
+                ", content='" + content + '\'' +
+                ", upVoteCount=" + upVoteCount +
+                ", downVoteCount=" + downVoteCount +
+                ", owner=" + owner +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", tags=" + tags +
+                '}';
     }
 }

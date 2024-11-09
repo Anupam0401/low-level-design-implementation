@@ -1,13 +1,12 @@
 package implement.lld.post;
 
-import implement.lld.User;
+import implement.lld.user.User;
 
-import java.util.List;
+import java.util.Set;
 
 public class Comment extends Post {
-    List<Tag> tags;
 
-    public Comment(int id, String title, String content, User owner) {
-        super(id, title, content, owner);
+    public Comment(long id, String content, User owner, Set<Tag> tags) {
+        super(id, content, owner, tags);
     }
 }
