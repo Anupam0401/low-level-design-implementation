@@ -60,4 +60,16 @@ public class User {
     public void setReputationScore(double reputationScore) {
         this.reputationScore = reputationScore;
     }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                ", reputationScore=" + reputationScore +
+                '}';
+    }
 }

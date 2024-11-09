@@ -8,23 +8,20 @@ import java.util.Set;
 
 public class PostFactory {
     public static Post createPost(PostType type, String title, String content, User owner, Set<Tag> tags) {
-        if (!isValidPost(type, title, content, owner)) {
-            throw new IllegalPostException("Invalid post details, unable to create post");
+        long postId = IdGenerator.generatePostId();
+        if (type == PostType.QUESTION) {
+            return new Question(postId, title, content, owner, tags);
+        } else {
+            throw new IllegalPostException("Invalid post type");
         }
+    }
+
+    public static Post createPost(PostType type, String title, String content, User owner, Set<Tag> tags, Post parentPost) {
         long postId = IdGenerator.generatePostId();
         return switch (type) {
             case QUESTION -> new Question(postId, title, content, owner, tags);
-            case ANSWER -> new Answer(postId, content, owner, tags);
-            case COMMENT -> new Comment(postId, content, owner, tags);
+            case ANSWER -> new Answer(postId, content, owner, tags, (Question) parentPost);
+            case COMMENT -> new Comment(postId, content, owner, tags, parentPost);
         };
-    }
-
-    private static boolean isValidPost(PostType type, String title, String content, User owner) {
-        return PostType.getAllPostTypes().contains(type)
-            && title != null
-            && !title.isEmpty()
-            && content != null
-            && !content.isEmpty()
-            && owner != null;
     }
 }

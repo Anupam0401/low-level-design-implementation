@@ -5,6 +5,9 @@ import implement.lld.exception.IllegalUserException;
 
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class UserManager {
@@ -25,24 +28,25 @@ public class UserManager {
         return instance;
     }
 
-    public void registerUser(String name, String email) {
+    public long registerUser(String name, String email) {
         validateUser(name, email);
         long userId = IdGenerator.generateUserId();
         User user = new User(userId, name, email);
         users.put(userId, user);
         user.setUpdatedAt(Timestamp.from(Instant.now()));
-        System.out.println("User registered successfully\n");
+        System.out.println("User registered successfully with userId: " + userId + "\n");
+        return userId;
     }
 
     private void validateUser(String name, String email) {
         if (name == null || name.isEmpty() || email == null || email.isEmpty()) {
             throw new IllegalUserException("Name and email are mandatory fields");
         }
-        if (!email.matches("^(.+)@(.+)$")) {
+        if (!email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")) {
             throw new IllegalUserException("Invalid email");
         }
         if (findUserByName(name) != null) {
-            throw new IllegalUserException("User with same name already exists");
+            throw new IllegalUserException("User with same name already exists, please use different name");
         }
     }
 
@@ -58,7 +62,7 @@ public class UserManager {
         }
         user.setName(updatedName);
         user.setUpdatedAt(Timestamp.from(Instant.now()));
-        System.out.println("Name updated successfully\n");
+        System.out.println("Name for userId: " + userId + " updated successfully\n");
     }
 
     public void updateUserEmail(long userId, String updatedEmail) {
@@ -85,6 +89,14 @@ public class UserManager {
             }
         }
         return null;
+    }
+
+    public List<Map<Long, User>> getUsers() {
+        List<Map<Long, User>> userList = new ArrayList<>();
+        for (User user : users.values()) {
+            userList.add(Map.of(user.getId(), user));
+        }
+        return userList;
     }
 
 }
