@@ -33,21 +33,55 @@ public class PostManager {
         return instance;
     }
 
-    public void createPost(PostType type, String title, String content, User owner, Set<Tag> tags) {
-        Post post = PostFactory.createPost(type, title, content, owner, tags);
-        switch (post) {
-            case Question ignored -> {
+    public long createPost(PostType type, String title, String content, User owner, Set<Tag> tags) {
+        if (type == PostType.QUESTION) {
+            return createPost(type, title, content, owner, tags, -1);
+        } else {
+            throw new IllegalArgumentException("Parent post ID is required for non-question posts.");
+        }
+    }
+
+    public long createPost(PostType postType, String title, String content, User owner, Set<Tag> tags, long parentPostId) {
+        if (!isValidPost(postType, title, content, owner, parentPostId)) {
+            throw new IllegalPostException("Invalid post details, unable to create post");
+        }
+        Post post = null;
+        switch (postType) {
+            case QUESTION -> {
+                post = PostFactory.createPost(postType, title, content, owner, tags);
                 reputationCalculator.updateReputationScore(owner, ReputationEvent.QUESTION_ADDED);
                 System.out.println("Question created successfully\n");
             }
-            case Answer ignored -> {
+            case ANSWER -> {
+                post = PostFactory.createPost(postType, title, content, owner, tags, findPostById(parentPostId));
                 reputationCalculator.updateReputationScore(owner, ReputationEvent.ANSWER_ADDED);
+                addAnswerToQuestion(parentPostId, (Answer) post);
                 System.out.println("Answer created successfully\n");
             }
-            case Comment ignored -> System.out.println("Comment created successfully\n");
+            case COMMENT -> {
+                post = PostFactory.createPost(postType, title, content, owner, tags, findPostById(parentPostId));
+                addCommentToPost(parentPostId, (Comment) post);
+                System.out.println("Comment created successfully\n");
+            }
             default -> throw new IllegalStateException("Unexpected value: " + post);
         }
         posts.put(post.getId(), post);
+        return post.getId();
+    }
+
+    private boolean isValidPost(PostType type, String title, String content, User owner, long parentPostId) {
+        if (PostType.getAllPostTypes().contains(type)
+            && content != null
+            && !content.isEmpty()
+            && owner != null
+        ) {
+            if (type == PostType.QUESTION) {
+                return title != null && !title.isEmpty();
+            } else if (type == PostType.ANSWER || type == PostType.COMMENT) {
+                return posts.containsKey(parentPostId);
+            }
+        }
+        return false;
     }
 
     public void updatePostContent(long postId, String updatedContent) {
@@ -78,13 +112,13 @@ public class PostManager {
         }
     }
 
-    public void addAnswerToQuestion(long questionId, Answer answer) {
+    private void addAnswerToQuestion(long questionId, Answer answer) {
         Post post = posts.get(questionId);
         if (post == null) {
             throw new IllegalPostException("Question not found");
         }
         if (post instanceof Question) {
-            ((Question) post).getAnswers().add(answer);
+            ((Question) post).addAnswer(answer);
             post.setUpdatedAt(Timestamp.from(Instant.now()));
             System.out.println("Answer added successfully\n");
         } else {
@@ -92,16 +126,16 @@ public class PostManager {
         }
     }
 
-    public void addCommentToPost(long postId, Comment comment) {
+    private void addCommentToPost(long postId, Comment comment) {
         Post post = posts.get(postId);
         switch (post) {
             case Question question -> {
-                question.getComments().add(comment);
+                question.addComment(comment);
                 question.setUpdatedAt(Timestamp.from(Instant.now()));
                 System.out.println("Comment added successfully\n");
             }
             case Answer answer -> {
-                answer.getComments().add(comment);
+                answer.addComment(comment);
                 answer.setUpdatedAt(Timestamp.from(Instant.now()));
                 System.out.println("Comment added successfully\n");
             }
@@ -123,10 +157,13 @@ public class PostManager {
         }
     }
 
-    public void upVotePost(long postId) {
+    public void upVotePost(long postId, long userId) {
         Post post = posts.get(postId);
         if (post == null) {
             throw new IllegalPostException("Post not found");
+        }
+        if (post.getOwner().getId() == userId) {
+            throw new IllegalPostException("User cannot up-vote own post");
         }
         post.getUpVoteCount().incrementAndGet();
         post.setUpdatedAt(Timestamp.from(Instant.now()));
@@ -138,10 +175,13 @@ public class PostManager {
         System.out.println("Post up-voted successfully\n");
     }
 
-    public void downVotePost(long postId) {
+    public void downVotePost(long postId, long userId) {
         Post post = posts.get(postId);
         if (post == null) {
             throw new IllegalPostException("Post not found");
+        }
+        if (post.getOwner().getId() == userId) {
+            throw new IllegalPostException("User cannot down-vote own post");
         }
         post.getDownVoteCount().incrementAndGet();
         post.setUpdatedAt(Timestamp.from(Instant.now()));
@@ -185,6 +225,10 @@ public class PostManager {
             allPosts.add(Map.of(post.getId(), post));
         }
         return allPosts;
+    }
+
+    public Post findPostById(long postId) {
+        return posts.get(postId);
     }
 
     public List<Map<Long, Post>> getPostsByUser(User user) {
