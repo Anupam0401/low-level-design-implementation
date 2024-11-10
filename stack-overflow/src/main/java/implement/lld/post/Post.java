@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+// Composite Pattern for Hierarchical Structure
 public abstract class Post {
     private final long id;
     private String content;
