@@ -1,4 +1,4 @@
-package implement.lld.entities;
+package implement.lld.model;
 
 import lombok.Getter;
 import lombok.Setter;

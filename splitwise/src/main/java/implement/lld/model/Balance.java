@@ -1,4 +1,4 @@
-package implement.lld.entities;
+package implement.lld.model;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,4 +1,4 @@
-package implement.lld.entities.split;
+package implement.lld.model.split;
 
 import java.util.List;
 import java.util.UUID;

@@ -1,6 +1,6 @@
 package implement.lld.service;
 
-import implement.lld.entities.Balance;
+import implement.lld.model.Balance;
 import lombok.extern.log4j.Log4j2;
 
 import java.util.UUID;

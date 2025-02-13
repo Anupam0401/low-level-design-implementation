@@ -1,4 +1,4 @@
-package implement.lld.entities.split;
+package implement.lld.model.split;
 
 import lombok.Getter;
 

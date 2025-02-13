@@ -1,7 +1,8 @@
-package implement.lld.entities;
+package implement.lld.model.expense;
 
-import implement.lld.entities.split.Split;
+import implement.lld.model.split.Split;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 import java.util.UUID;
@@ -10,9 +11,12 @@ import java.util.UUID;
 public class Expense {
     private final UUID id;
     private final UUID payerId;
-    private final String description;
-    private final Double amount;
-    private final List<Split> splits;
+    @Setter
+    private String description;
+    @Setter
+    private Double amount;
+    @Setter
+    private List<Split> splits;
 
     public Expense(UUID id, UUID payerId, String description, Double amount, List<Split> splits) {
         this.id = id;
