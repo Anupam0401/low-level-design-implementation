@@ -1,8 +1,11 @@
 package implement.lld.entities.split;
 
+import lombok.Getter;
+
 import java.util.List;
 import java.util.UUID;
 
+@Getter
 public class PercentSplit extends Split {
     private final double percent;
 
