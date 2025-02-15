@@ -1,4 +1,4 @@
-package implement.lld.service;
+package implement.lld.service.expense;
 
 import implement.lld.exception.InvalidSplitException;
 import implement.lld.model.expense.Expense;
@@ -6,16 +6,16 @@ import implement.lld.model.split.PercentSplit;
 import implement.lld.model.split.Split;
 import implement.lld.model.split.SplitType;
 import implement.lld.repository.ExpenseRepository;
+import implement.lld.service.BalanceService;
 import lombok.extern.log4j.Log4j2;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 @Log4j2
 public abstract class AbstractExpenseService {
-    private final BalanceService balanceService;
-    private final ExpenseRepository expenseRepository;
+    protected final BalanceService balanceService;
+    protected final ExpenseRepository expenseRepository;
 
     public AbstractExpenseService(BalanceService balanceService, ExpenseRepository expenseRepository) {
         this.balanceService = balanceService;
@@ -55,8 +55,13 @@ public abstract class AbstractExpenseService {
         }
     }
 
-    protected Expense findExpense(UUID userId, UUID expenseId) {
-        List<Expense> expenses = expenseRepository.findExpenses(userId, expenseId);
+    protected Expense findExpense(UUID expenseId) {
+        Expense expense = expenseRepository.findExpenseByExpenseId(expenseId);
+        if (expense == null) {
+            log.error("Expense not found for expenseId {}", expenseId);
+            return null;
+        }
+        return expense;
     }
 
     protected void rollbackExpense(Expense expense) {

@@ -17,13 +17,17 @@ public class Expense {
     private Double amount;
     @Setter
     private List<Split> splits;
+    private final ExpenseType expenseType;
+    @Setter
+    private UUID groupId = null;
 
-    public Expense(UUID id, UUID payerId, String description, Double amount, List<Split> splits) {
+    public Expense(UUID id, UUID payerId, String description, Double amount, List<Split> splits, ExpenseType expenseType) {
         this.id = id;
         this.payerId = payerId;
         this.description = description;
         this.amount = amount;
         this.splits = splits;
+        this.expenseType = expenseType;
     }
 
 }
