@@ -5,6 +5,7 @@ import implement.lld.service.expense.GroupExpenseService;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -12,6 +13,7 @@ import java.util.PriorityQueue;
 import java.util.UUID;
 
 @Log4j2
+@Component
 public class DebtSimplificationHelper {
     private final BalanceService balanceService;
     private final GroupExpenseService groupExpenseService;

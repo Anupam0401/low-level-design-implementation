@@ -3,6 +3,7 @@ package implement.lld.service;
 import implement.lld.model.Transaction;
 import implement.lld.repository.ITransactionRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
 import java.time.LocalDate;
@@ -12,6 +13,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReentrantLock;
 
 @Log4j2
+@Service
 public class TransactionService {
     private final BalanceService balanceService;
     private final ITransactionRepository transactionRepository;

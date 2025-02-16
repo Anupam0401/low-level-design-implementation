@@ -3,10 +3,12 @@ package implement.lld.service.expense;
 import implement.lld.model.expense.Expense;
 import implement.lld.model.expense.ExpenseType;
 import implement.lld.model.split.Split;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.UUID;
 
+@Component
 public class ExpenseFactory {
     public static Expense createExpense(
         UUID payerId,

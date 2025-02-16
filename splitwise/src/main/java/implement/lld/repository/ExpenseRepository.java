@@ -5,12 +5,14 @@ import implement.lld.model.expense.Expense;
 import implement.lld.model.expense.ExpenseType;
 import implement.lld.model.split.Split;
 import implement.lld.service.expense.ExpenseFactory;
+import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+@Repository
 public class ExpenseRepository {
     private final ConcurrentHashMap<UUID, Expense> groupExpenses = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Expense> nonGroupExpenses = new ConcurrentHashMap<>();

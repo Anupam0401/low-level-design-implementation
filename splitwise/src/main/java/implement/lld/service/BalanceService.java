@@ -2,11 +2,13 @@ package implement.lld.service;
 
 import implement.lld.model.Balance;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Service;
 
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 @Log4j2
+@Service
 public class BalanceService {
     private final ConcurrentHashMap<UUID, Balance> userBalances = new ConcurrentHashMap<>();
 

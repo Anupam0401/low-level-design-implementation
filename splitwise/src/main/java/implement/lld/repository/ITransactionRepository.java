@@ -1,6 +1,7 @@
 package implement.lld.repository;
 
 import implement.lld.model.Transaction;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 import java.util.UUID;
