@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.Comparator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.PriorityQueue;
 import java.util.UUID;
 
@@ -31,7 +32,9 @@ public class DebtSimplificationHelper {
         Map<UUID, Double> netBalance = groupExpenseService.getGroupNetBalance(groupId);
 
         PriorityQueue<UserBalance> debtors = new PriorityQueue<>(Comparator.comparingDouble(UserBalance::getAmount));
-        PriorityQueue<UserBalance> creditors = new PriorityQueue<>((a, b) -> Double.compare(b.getAmount(), a.getAmount()));
+        PriorityQueue<UserBalance> creditors = new PriorityQueue<>(
+            (a, b) -> Double.compare(b.getAmount(), a.getAmount())
+        );
 
         for (Map.Entry<UUID, Double> entry : netBalance.entrySet()) {
             UUID userId = entry.getKey();
@@ -46,7 +49,9 @@ public class DebtSimplificationHelper {
         while (!debtors.isEmpty() && !creditors.isEmpty()) {
             UserBalance debtor = debtors.poll();
             UserBalance creditor = creditors.poll();
-            double settleAmount = Math.min(-debtor.getAmount(), creditor.getAmount());
+            double settleAmount = Objects.nonNull(creditor)
+                ? Math.min(-debtor.getAmount(), creditor.getAmount())
+                : -debtor.getAmount();
 
             // Update the balances
             balanceService.updateBalance(debtor.getUserId(), creditor.getUserId(), settleAmount);
