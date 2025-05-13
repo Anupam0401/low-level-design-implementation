@@ -13,8 +13,11 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * In-memory implementation of the IExpenseRepository interface
+ */
 @Repository
-public class ExpenseRepository implements IExpenseRepository {
+public class InMemoryExpenseRepository implements IExpenseRepository {
     private final ConcurrentHashMap<UUID, Expense> groupExpenses = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Expense> nonGroupExpenses = new ConcurrentHashMap<>();
     private final ConcurrentHashMap<UUID, Expense> personalExpenses = new ConcurrentHashMap<>();
@@ -29,6 +32,7 @@ public class ExpenseRepository implements IExpenseRepository {
         UUID groupId
     ) {
         Expense expense = ExpenseFactory.createExpense(payerId, description, amount, splits, expenseType);
+        
         switch (expenseType) {
             case GROUP -> {
                 expense.setGroupId(groupId);
@@ -38,6 +42,7 @@ public class ExpenseRepository implements IExpenseRepository {
             case PERSONAL -> personalExpenses.put(expense.getId(), expense);
             default -> throw new InvalidExpenseTypeException("Unexpected value of expense type: " + expenseType);
         }
+        
         return expense;
     }
 
@@ -95,7 +100,7 @@ public class ExpenseRepository implements IExpenseRepository {
         }
         return expenses;
     }
-    
+
     @Override
     public Expense updateExpense(Expense expense) {
         switch (expense.getExpenseType()) {

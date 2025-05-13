@@ -1,6 +1,7 @@
-package implement.lld.repository;
+package implement.lld.repository.impl;
 
 import implement.lld.model.Transaction;
+import implement.lld.repository.interfaces.ITransactionRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -32,6 +33,4 @@ public class InMemoryTransactionRepository implements ITransactionRepository {
                 .findFirst()
                 .orElse(null);
     }
-
-
 }

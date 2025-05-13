@@ -1,8 +1,9 @@
 package implement.lld.service;
 
 import implement.lld.model.Transaction;
-import implement.lld.repository.ITransactionRepository;
+import implement.lld.repository.interfaces.ITransactionRepository;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.Timestamp;
@@ -19,6 +20,7 @@ public class TransactionService {
     private final ITransactionRepository transactionRepository;
     private final ConcurrentHashMap<UUID, ReentrantLock> userLocks = new ConcurrentHashMap<>();
 
+    @Autowired
     public TransactionService(BalanceService balanceService, ITransactionRepository transactionRepository) {
         this.balanceService = balanceService;
         this.transactionRepository = transactionRepository;

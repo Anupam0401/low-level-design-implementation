@@ -5,7 +5,7 @@ import implement.lld.model.expense.Expense;
 import implement.lld.model.split.PercentSplit;
 import implement.lld.model.split.Split;
 import implement.lld.model.split.SplitType;
-import implement.lld.repository.ExpenseRepository;
+import implement.lld.repository.interfaces.IExpenseRepository;
 import implement.lld.service.BalanceService;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
@@ -17,9 +17,9 @@ import java.util.UUID;
 @Service
 public abstract class AbstractExpenseService {
     protected final BalanceService balanceService;
-    protected final ExpenseRepository expenseRepository;
+    protected final IExpenseRepository expenseRepository;
 
-    public AbstractExpenseService(BalanceService balanceService, ExpenseRepository expenseRepository) {
+    public AbstractExpenseService(BalanceService balanceService, IExpenseRepository expenseRepository) {
         this.balanceService = balanceService;
         this.expenseRepository = expenseRepository;
     }
