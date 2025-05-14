@@ -1,0 +1,326 @@
+# Splitwise System Design Documentation
+
+## Document Information
+- **Title**: Splitwise System Design Documentation
+- **Version**: 1.0
+- **Date**: May 14, 2025
+- **Author**: [Your Name]
+
+## Table of Contents
+1. Introduction
+2. High-Level Design (HLD)
+3. Low-Level Design (LLD)
+4. Database Design
+5. API Specifications
+6. Sequence Diagrams
+7. Implementation Details
+8. Testing Strategy
+9. Deployment Strategy
+10. Future Enhancements
+
+---
+
+## 1. Introduction
+
+### 1.1 Purpose
+This document provides a comprehensive design for the Splitwise application, an expense-sharing platform that allows users to track shared expenses and settle debts efficiently.
+
+### 1.2 Scope
+The document covers both high-level architecture and low-level implementation details, including component interactions, data models, algorithms, and database design.
+
+### 1.3 System Overview
+Splitwise is a platform that enables users to:
+- Create and manage user accounts
+- Form groups for shared expenses
+- Add various types of expenses (personal, group, non-group)
+- Split expenses using different strategies (equal, percentage, exact)
+- Track balances between users
+- Simplify debts to minimize transactions
+- Settle up through transactions
+
+---
+
+## 2. High-Level Design (HLD)
+
+### 2.1 System Architecture
+[INSERT DIAGRAM: System Architecture showing Client Apps, API Gateway, Load Balancer, Application Servers, Database, Cache Layer, and Notification Service]
+
+### 2.2 Core Components
+
+#### 2.2.1 API Gateway
+- Entry point for all client requests
+- Handles authentication and authorization
+- Routes requests to appropriate services
+- Rate limiting and request throttling
+
+#### 2.2.2 Application Servers
+- Implements the business logic
+- Processes expense creation and splitting
+- Manages user and group data
+- Implements debt simplification algorithms
+- Stateless for horizontal scalability
+
+#### 2.2.3 Database Layer
+- Stores user profiles, groups, expenses, and transactions
+- Maintains balance records between users
+- Supports ACID transactions for financial operations
+- Current implementation uses in-memory storage with interfaces for easy migration to persistent storage
+
+#### 2.2.4 Cache Layer
+- Caches frequently accessed data (user balances, group information)
+- Reduces database load
+- Improves response times for common operations
+
+#### 2.2.5 Notification Service
+- Sends notifications for new expenses, settlements, and reminders
+- Supports multiple channels (email, push notifications, SMS)
+
+### 2.3 Data Flow Diagram
+[INSERT DIAGRAM: Data Flow Diagram showing User Interface → Controller Layer → Service Layer → Repository Layer → Database]
+
+### 2.4 Key Subsystems
+
+#### 2.4.1 User Management Subsystem
+- User registration and authentication
+- User profile management
+- Friend/contact management
+
+#### 2.4.2 Group Management Subsystem
+- Group creation and configuration
+- Member management
+- Group expense tracking
+
+#### 2.4.3 Expense Management Subsystem
+- Expense creation with different types (personal, group, non-group)
+- Support for various splitting strategies (equal, percentage, exact amount)
+- Expense categorization and tagging
+
+#### 2.4.4 Balance Management Subsystem
+- Balance calculation between users
+- Net balance tracking for groups
+- Debt simplification algorithm
+
+#### 2.4.5 Transaction Management Subsystem
+- Settlement transaction recording
+- Transaction history and reporting
+- Payment integration (future enhancement)
+
+### 2.5 System Interactions Diagram
+[INSERT DIAGRAM: System Interactions showing User System → Group System → Expense System → Balance System → Transaction System]
+
+---
+
+## 3. Low-Level Design (LLD)
+
+### 3.1 Domain Model
+
+#### 3.1.1 Class Diagram - Core Entities
+[INSERT DIAGRAM: Class Diagram showing User, Group, Expense, Split, Transaction, and Balance classes with their relationships]
+
+### 3.2 Repository Layer
+
+#### 3.2.1 Repository Interfaces
+[INSERT DIAGRAM: Class Diagram showing IUserRepository, IGroupRepository, IExpenseRepository, ITransactionRepository, and IBalanceRepository interfaces]
+
+#### 3.2.2 In-Memory Repository Implementations
+[INSERT DIAGRAM: Class Diagram showing InMemoryUserRepository, InMemoryGroupRepository, InMemoryExpenseRepository, InMemoryTransactionRepository, and InMemoryBalanceRepository classes]
+
+### 3.3 Service Layer
+
+#### 3.3.1 Service Classes
+[INSERT DIAGRAM: Class Diagram showing SplitWiseService, BalanceService, TransactionService, and DebtSimplificationHelper classes]
+
+#### 3.3.2 Expense Service Hierarchy
+[INSERT DIAGRAM: Class Diagram showing AbstractExpenseService and its implementations: GroupExpenseService, PersonalExpenseService, and NonGroupExpenseService]
+
+### 3.4 Controller Layer
+[INSERT DIAGRAM: Class Diagram showing SplitWiseController and HealthCheckController classes]
+
+### 3.5 DTO Layer
+
+#### 3.5.1 Request DTOs
+[INSERT DIAGRAM: Class Diagram showing UserRequestDto, GroupRequestDto, ExpenseRequestDto, and SplitRequestDto classes]
+
+#### 3.5.2 Response DTOs
+[INSERT DIAGRAM: Class Diagram showing UserResponseDto, GroupResponseDto, ExpenseResponseDto, SplitResponseDto, TransactionResponseDto, BalanceResponseDto, and ErrorResponseDto classes]
+
+### 3.6 Mapper Classes
+[INSERT DIAGRAM: Class Diagram showing UserMapper, GroupMapper, ExpenseMapper, TransactionMapper, and BalanceMapper classes]
+
+### 3.7 Exception Handling
+[INSERT DIAGRAM: Class Diagram showing GlobalExceptionHandler and custom exception classes]
+
+### 3.8 Configuration
+[INSERT DIAGRAM: Class Diagram showing AppConfig class]
+
+---
+
+## 4. Database Design
+
+### 4.1 Entity Relationship Diagram (ERD)
+[INSERT DIAGRAM: ERD showing Users, Groups, Group_Members, Expenses, Splits, Transactions, and Balances tables with their relationships]
+
+### 4.2 Table Definitions
+
+#### 4.2.1 Users Table
+| Column Name | Data Type | Constraints | Description |
+|-------------|-----------|-------------|-------------|
+| user_id | UUID | PRIMARY KEY | Unique identifier for the user |
+| name | VARCHAR(255) | NOT NULL | User's full name |
+| email | VARCHAR(255) | NOT NULL, UNIQUE | User's email address |
+| created_at | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | User creation timestamp |
+| updated_at | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp |
+
+#### 4.2.2 Groups Table
+| Column Name | Data Type | Constraints | Description |
+|-------------|-----------|-------------|-------------|
+| group_id | UUID | PRIMARY KEY | Unique identifier for the group |
+| name | VARCHAR(255) | NOT NULL | Group name |
+| description | TEXT | | Group description |
+| owner_id | UUID | NOT NULL, FOREIGN KEY | Reference to the group owner |
+| created_at | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Group creation timestamp |
+| updated_at | TIMESTAMP | NOT NULL, DEFAULT CURRENT_TIMESTAMP | Last update timestamp |
+
+[CONTINUE WITH OTHER TABLES...]
+
+### 4.3 Indexes
+[LIST OF INDEXES WITH DESCRIPTIONS]
+
+### 4.4 Data Access Patterns
+[DESCRIPTION OF COMMON QUERIES AND ACCESS PATTERNS]
+
+---
+
+## 5. API Specifications
+
+### 5.1 User Management APIs
+
+#### 5.1.1 Create User
+- **Endpoint**: POST /api/v1/users
+- **Request Body**:
+```json
+{
+    "name": "John Doe",
+    "email": "john@example.com"
+}
+```
+- **Response**:
+```json
+{
+    "userId": "123e4567-e89b-12d3-a456-426614174000",
+    "name": "John Doe",
+    "email": "john@example.com",
+    "createdAt": "2025-05-14T12:00:00"
+}
+```
+
+[CONTINUE WITH OTHER API ENDPOINTS...]
+
+---
+
+## 6. Sequence Diagrams
+
+### 6.1 User Creation Sequence
+[INSERT DIAGRAM: Sequence diagram for user creation]
+
+### 6.2 Adding a Group Expense Sequence
+[INSERT DIAGRAM: Sequence diagram for adding a group expense]
+
+### 6.3 Getting User Balances Sequence
+[INSERT DIAGRAM: Sequence diagram for getting user balances]
+
+### 6.4 Debt Simplification Sequence
+[INSERT DIAGRAM: Sequence diagram for debt simplification]
+
+### 6.5 Performing a Transaction Sequence
+[INSERT DIAGRAM: Sequence diagram for performing a transaction]
+
+---
+
+## 7. Implementation Details
+
+### 7.1 Design Patterns Used
+
+#### 7.1.1 Repository Pattern
+[DESCRIPTION AND CODE EXAMPLE]
+
+#### 7.1.2 Strategy Pattern
+[DESCRIPTION AND CODE EXAMPLE]
+
+#### 7.1.3 Factory Pattern
+[DESCRIPTION AND CODE EXAMPLE]
+
+#### 7.1.4 Template Method Pattern
+[DESCRIPTION AND CODE EXAMPLE]
+
+### 7.2 Key Algorithms
+
+#### 7.2.1 Debt Simplification Algorithm
+[DESCRIPTION AND CODE EXAMPLE]
+
+#### 7.2.2 Balance Calculation Algorithm
+[DESCRIPTION AND CODE EXAMPLE]
+
+### 7.3 Concurrent Data Structures
+[DESCRIPTION AND CODE EXAMPLE]
+
+### 7.4 Validation
+[DESCRIPTION AND CODE EXAMPLE]
+
+### 7.5 Exception Handling
+[DESCRIPTION AND CODE EXAMPLE]
+
+---
+
+## 8. Testing Strategy
+
+### 8.1 Unit Testing
+[DESCRIPTION AND CODE EXAMPLE]
+
+### 8.2 Integration Testing
+[DESCRIPTION AND CODE EXAMPLE]
+
+---
+
+## 9. Deployment Strategy
+
+### 9.1 Deployment Architecture
+[INSERT DIAGRAM: Deployment architecture diagram]
+
+### 9.2 Scaling Considerations
+[DESCRIPTION OF SCALING STRATEGIES]
+
+### 9.3 Monitoring and Observability
+[DESCRIPTION OF MONITORING APPROACH]
+
+---
+
+## 10. Future Enhancements
+
+### 10.1 Payment Integration
+[DESCRIPTION]
+
+### 10.2 Advanced Analytics
+[DESCRIPTION]
+
+### 10.3 Social Features
+[DESCRIPTION]
+
+---
+
+## Appendix A: Glossary
+
+| Term | Definition |
+|------|------------|
+| Split | A portion of an expense assigned to a user |
+| Balance | The net amount one user owes to another |
+| Transaction | A payment made by one user to another to settle a debt |
+| Debt Simplification | Algorithm to minimize the number of transactions needed to settle debts |
+
+---
+
+## Appendix B: References
+
+1. Spring Boot Documentation: https://docs.spring.io/spring-boot/docs/current/reference/html/
+2. Java Concurrency in Practice by Brian Goetz
+3. Domain-Driven Design by Eric Evans
