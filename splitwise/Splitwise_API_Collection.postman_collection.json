@@ -1,0 +1,700 @@
+{
+	"info": {
+		"_postman_id": "3f5e6d7c-8a9b-4c0d-8e1f-2a3b4c5d6e7f",
+		"name": "Splitwise API Collection",
+		"description": "A comprehensive collection of APIs for the Splitwise application",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Health Check",
+			"item": [
+				{
+					"name": "Ping",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/health/ping",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"health",
+								"ping"
+							]
+						},
+						"description": "Simple health check endpoint"
+					},
+					"response": []
+				},
+				{
+					"name": "Status",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/health/status",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"health",
+								"status"
+							]
+						},
+						"description": "Detailed health check status"
+					},
+					"response": []
+				}
+			],
+			"description": "Health check endpoints to verify the application is running"
+		},
+		{
+			"name": "User Management",
+			"item": [
+				{
+					"name": "Create User",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"John Doe\",\n    \"email\": \"john.doe@example.com\"\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						},
+						"description": "Create a new user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Get user details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/users",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"users"
+							]
+						},
+						"description": "Get all users"
+					},
+					"response": []
+				}
+			],
+			"description": "User management endpoints"
+		},
+		{
+			"name": "Group Management",
+			"item": [
+				{
+					"name": "Create Group",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Trip to Mountains\",\n    \"description\": \"Weekend trip expenses\",\n    \"ownerId\": \"{{user_id}}\",\n    \"memberIds\": [\"{{member1_id}}\", \"{{member2_id}}\"]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/groups",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"groups"
+							]
+						},
+						"description": "Create a new group"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/groups/{{group_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "Get group details by ID"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Member to Group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/groups/{{group_id}}/members/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"groups",
+								"{{group_id}}",
+								"members",
+								"{{user_id}}"
+							]
+						},
+						"description": "Add a member to a group"
+					},
+					"response": []
+				}
+			],
+			"description": "Group management endpoints"
+		},
+		{
+			"name": "Expense Management",
+			"item": [
+				{
+					"name": "Add Personal Expense",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/personal?payerId={{payer_id}}&receiverId={{receiver_id}}&amount=500&description=Lunch",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"personal"
+							],
+							"query": [
+								{
+									"key": "payerId",
+									"value": "{{payer_id}}"
+								},
+								{
+									"key": "receiverId",
+									"value": "{{receiver_id}}"
+								},
+								{
+									"key": "amount",
+									"value": "500"
+								},
+								{
+									"key": "description",
+									"value": "Lunch"
+								}
+							]
+						},
+						"description": "Add a personal expense"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Non-Group Expense",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payerId\": \"{{payer_id}}\",\n    \"amount\": 3000,\n    \"description\": \"Dinner\",\n    \"expenseType\": \"NON_GROUP\",\n    \"splitType\": \"EQUAL\",\n    \"splits\": [\n        {\n            \"userId\": \"{{payer_id}}\"\n        },\n        {\n            \"userId\": \"{{user1_id}}\"\n        },\n        {\n            \"userId\": \"{{user2_id}}\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/non-group",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"non-group"
+							]
+						},
+						"description": "Add a non-group expense with equal splits"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Group Expense",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"groupId\": \"{{group_id}}\",\n    \"payerId\": \"{{payer_id}}\",\n    \"amount\": 5000,\n    \"description\": \"Hotel\",\n    \"expenseType\": \"GROUP\",\n    \"splitType\": \"EQUAL\",\n    \"splits\": [\n        {\n            \"userId\": \"{{payer_id}}\"\n        },\n        {\n            \"userId\": \"{{user1_id}}\"\n        },\n        {\n            \"userId\": \"{{user2_id}}\"\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/group",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"group"
+							]
+						},
+						"description": "Add a group expense with equal splits"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Non-Group Expense (Percent Split)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payerId\": \"{{payer_id}}\",\n    \"amount\": 1000,\n    \"description\": \"Movie tickets\",\n    \"expenseType\": \"NON_GROUP\",\n    \"splitType\": \"PERCENT\",\n    \"splits\": [\n        {\n            \"userId\": \"{{payer_id}}\",\n            \"percent\": 30\n        },\n        {\n            \"userId\": \"{{user1_id}}\",\n            \"percent\": 40\n        },\n        {\n            \"userId\": \"{{user2_id}}\",\n            \"percent\": 30\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/non-group",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"non-group"
+							]
+						},
+						"description": "Add a non-group expense with percentage splits"
+					},
+					"response": []
+				},
+				{
+					"name": "Add Non-Group Expense (Exact Split)",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"payerId\": \"{{payer_id}}\",\n    \"amount\": 2500,\n    \"description\": \"Groceries\",\n    \"expenseType\": \"NON_GROUP\",\n    \"splitType\": \"EXACT\",\n    \"splits\": [\n        {\n            \"userId\": \"{{payer_id}}\",\n            \"amount\": 1000\n        },\n        {\n            \"userId\": \"{{user1_id}}\",\n            \"amount\": 800\n        },\n        {\n            \"userId\": \"{{user2_id}}\",\n            \"amount\": 700\n        }\n    ]\n}"
+						},
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/non-group",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"non-group"
+							]
+						},
+						"description": "Add a non-group expense with exact amount splits"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Expenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Get all expenses for a user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group Expenses",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/expenses/groups/{{group_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"expenses",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "Get all expenses for a group"
+					},
+					"response": []
+				}
+			],
+			"description": "Expense management endpoints"
+		},
+		{
+			"name": "Balance Management",
+			"item": [
+				{
+					"name": "Get Balance Between Users",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/balances/users/{{user1_id}}/users/{{user2_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"balances",
+								"users",
+								"{{user1_id}}",
+								"users",
+								"{{user2_id}}"
+							]
+						},
+						"description": "Get balance between two users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Balances",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/balances/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"balances",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Get all balances for a user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Group Net Balances",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/balances/groups/{{group_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"balances",
+								"groups",
+								"{{group_id}}"
+							]
+						},
+						"description": "Get net balances for a group"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Simplified Group Debts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/balances/groups/{{group_id}}/simplify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"balances",
+								"groups",
+								"{{group_id}}",
+								"simplify"
+							]
+						},
+						"description": "Get simplified debts for a group"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Simplified User Debts",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/balances/users/{{user_id}}/simplify",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"balances",
+								"users",
+								"{{user_id}}",
+								"simplify"
+							]
+						},
+						"description": "Get simplified debts for a user"
+					},
+					"response": []
+				}
+			],
+			"description": "Balance management endpoints"
+		},
+		{
+			"name": "Transaction Management",
+			"item": [
+				{
+					"name": "Perform Transaction",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions?senderId={{sender_id}}&receiverId={{receiver_id}}&amount=1500",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions"
+							],
+							"query": [
+								{
+									"key": "senderId",
+									"value": "{{sender_id}}"
+								},
+								{
+									"key": "receiverId",
+									"value": "{{receiver_id}}"
+								},
+								{
+									"key": "amount",
+									"value": "1500"
+								}
+							]
+						},
+						"description": "Perform a transaction between users"
+					},
+					"response": []
+				},
+				{
+					"name": "Get User Transactions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/users/{{user_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"users",
+								"{{user_id}}"
+							]
+						},
+						"description": "Get all transactions for a user"
+					},
+					"response": []
+				},
+				{
+					"name": "Get Transaction",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{base_url}}/api/v1/transactions/{{transaction_id}}",
+							"host": [
+								"{{base_url}}"
+							],
+							"path": [
+								"api",
+								"v1",
+								"transactions",
+								"{{transaction_id}}"
+							]
+						},
+						"description": "Get transaction details by ID"
+					},
+					"response": []
+				}
+			],
+			"description": "Transaction management endpoints"
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "base_url",
+			"value": "http://localhost:8080/splitwise",
+			"type": "string"
+		},
+		{
+			"key": "user_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user1_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "user2_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "group_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "payer_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "receiver_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "sender_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "transaction_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "member1_id",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "member2_id",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
