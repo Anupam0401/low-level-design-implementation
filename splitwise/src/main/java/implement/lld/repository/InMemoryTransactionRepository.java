@@ -1,4 +1,4 @@
-package implement.lld.repository.impl;
+package implement.lld.repository;
 
 import implement.lld.model.Transaction;
 import implement.lld.repository.interfaces.ITransactionRepository;

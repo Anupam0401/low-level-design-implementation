@@ -1,4 +1,4 @@
-package implement.lld.repository.impl;
+package implement.lld.repository;
 
 import implement.lld.exception.InvalidExpenseTypeException;
 import implement.lld.model.expense.Expense;

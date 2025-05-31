@@ -1,8 +1,8 @@
 package implement.lld.config;
 
+import implement.lld.repository.InMemoryTransactionRepository;
 import implement.lld.repository.impl.InMemoryBalanceRepository;
 import implement.lld.repository.impl.InMemoryGroupRepository;
-import implement.lld.repository.impl.InMemoryTransactionRepository;
 import implement.lld.repository.impl.InMemoryUserRepository;
 import implement.lld.repository.interfaces.IBalanceRepository;
 import implement.lld.repository.interfaces.IGroupRepository;

@@ -5,9 +5,9 @@ This document provides sequence diagrams for key operations in the Splitwise app
 ## 1. User Creation Sequence
 
 ```
-┌──────┐      ┌────────────────┐      ┌─────────────────┐      ┌─────────────────┐      ┌──────────────────┐
-│Client│      │SplitWiseController│      │SplitWiseService │      │UserRepository   │      │UserMapper       │
-└──┬───┘      └────────┬─────────┘      └────────┬────────┘      └────────┬────────┘      └────────┬─────────┘
+┌──────┐      ┌───────────────────┐      ┌────────────────┐      ┌─────────────────┐      ┌──────────────────┐
+│Client│      │SplitWiseController│      │SplitWiseService│      │UserRepository   │      │UserMapper        │
+└──┬───┘      └────────┬──────────┘      └───────┬────────┘      └────────┬────────┘      └────────┬─────────┘
    │                   │                         │                        │                        │
    │ POST /users       │                         │                        │                        │
    │ (UserRequestDto)  │                         │                        │                        │
