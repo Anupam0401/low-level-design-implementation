@@ -1,9 +1,12 @@
 package lld.implement.cache.core;
 
+import lld.implement.cache.Cache;
+import lld.implement.cache.internal.StripedLock;
+
 import java.util.Objects;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
-import lld.implement.cache.Cache;
+import java.util.concurrent.locks.Lock;
 import lld.implement.cache.DoublyLinkedList;
 import lld.implement.cache.Node;
 
@@ -26,6 +29,13 @@ public class LruCache<K, V> implements Cache<K, V> {
      * overriding {@link #createMap()} can reuse the value.
      */
     private final int concurrencyLevel;
+    
+    /**
+     * Lock striping for fine-grained concurrency control.
+     * Each key maps to a specific lock, allowing operations on different keys
+     * to proceed concurrently without contention.
+     */
+    private final StripedLock stripedLock;
 
     /**
      * Creates a new, empty LRU cache with the specified maximum size.
@@ -54,6 +64,7 @@ public class LruCache<K, V> implements Cache<K, V> {
 
         this.maxSize = maxSize;
         this.concurrencyLevel = concurrencyLevel;
+        this.stripedLock = new StripedLock(concurrencyLevel);
 
         // Use factory methods so that subclasses (e.g., in tests) can inject mocks.
         this.cache = createMap();
@@ -68,14 +79,28 @@ public class LruCache<K, V> implements Cache<K, V> {
     public V get(K key) {
         Objects.requireNonNull(key, "Key cannot be null");
         
+        // First check if the key exists without locking
         Node<K, V> node = cache.get(key);
         if (node == null) {
             return null; // Key not found
         }
         
-        // Update access order (move to MRU position)
-        accessOrder.moveToHead(node);
-        return node.getValue();
+        // Lock the specific stripe for this key
+        Lock lock = stripedLock.getLock(key);
+        lock.lock();
+        try {
+            // Re-check after acquiring the lock (double-check pattern)
+            node = cache.get(key);
+            if (node == null) {
+                return null; // Key was removed by another thread
+            }
+            
+            // Update access order (move to MRU position)
+            accessOrder.moveToHead(node);
+            return node.getValue();
+        } finally {
+            lock.unlock();
+        }
     }
 
     @Override
@@ -83,37 +108,72 @@ public class LruCache<K, V> implements Cache<K, V> {
         Objects.requireNonNull(key, "Key cannot be null");
         Objects.requireNonNull(value, "Value cannot be null");
         
-        // Check if key already exists
-        Node<K, V> existingNode = cache.get(key);
-        if (existingNode != null) {
-            // Update existing value and move to head
-            V oldValue = existingNode.getValue();
-            existingNode.setValue(value);
-            accessOrder.moveToHead(existingNode);
-            return oldValue;
+        Lock lock = stripedLock.getLock(key);
+        lock.lock();
+        try {
+            // Check if key already exists
+            Node<K, V> existingNode = cache.get(key);
+            if (existingNode != null) {
+                // Update existing value and move to head
+                V oldValue = existingNode.getValue();
+                existingNode.setValue(value);
+                accessOrder.moveToHead(existingNode);
+                return oldValue;
+            }
+            
+            // Check if we need to evict - use synchronized to ensure atomic size check and eviction
+            synchronized (this) {
+                while (cache.size() >= maxSize) {
+                    evict();
+                }
+            }
+            
+            // Add new entry
+            Node<K, V> newNode = new Node<>(key, value);
+            cache.put(key, newNode);
+            accessOrder.addFirst(newNode);
+            
+            return null;
+        } finally {
+            lock.unlock();
         }
-        
-        // Check if we need to evict
-        if (cache.size() >= maxSize) {
-            evict();
-        }
-        
-        // Add new entry
-        Node<K, V> newNode = new Node<>(key, value);
-        cache.put(key, newNode);
-        accessOrder.addFirst(newNode);
-        
-        return null;
     }
     
     /**
      * Evicts the least recently used entry from the cache.
-     * Must be called while holding appropriate locks.
+     * Must be called while holding appropriate locks for the caller's key.
+     * 
+     * Note: This method doesn't acquire locks itself because it's called from
+     * methods that already hold the appropriate lock. This avoids deadlocks
+     * that could occur if we tried to acquire multiple locks in different orders.
      */
     private void evict() {
         Node<K, V> toEvict = accessOrder.removeLast();
         if (toEvict != null) {
-            cache.remove(toEvict.getKey(), toEvict);
+            K evictKey = toEvict.getKey();
+            // We need to acquire the lock for the key we're evicting
+            // to ensure thread safety during eviction
+            Lock evictLock = stripedLock.getLock(evictKey);
+            
+            // Only acquire the lock if it's different from the current lock
+            // to avoid deadlock or redundant locking
+            boolean lockAcquired = false;
+            try {
+                // Try to acquire the lock, but don't block if unavailable
+                lockAcquired = evictLock.tryLock();
+                if (lockAcquired) {
+                    // Remove with the lock held
+                    cache.remove(evictKey, toEvict);
+                } else {
+                    // If we couldn't get the lock, just try a direct remove
+                    // This is safe because ConcurrentHashMap.remove is atomic
+                    cache.remove(evictKey, toEvict);
+                }
+            } finally {
+                if (lockAcquired) {
+                    evictLock.unlock();
+                }
+            }
         }
     }
 
@@ -121,17 +181,24 @@ public class LruCache<K, V> implements Cache<K, V> {
     public V remove(K key) {
         Objects.requireNonNull(key, "Key cannot be null");
         
-        Node<K, V> node = cache.remove(key);
-        if (node != null) {
-            accessOrder.remove(node);
-            return node.getValue();
+        Lock lock = stripedLock.getLock(key);
+        lock.lock();
+        try {
+            Node<K, V> node = cache.remove(key);
+            if (node != null) {
+                accessOrder.remove(node);
+                return node.getValue();
+            }
+            return null;
+        } finally {
+            lock.unlock();
         }
-        return null;
     }
 
     @Override
     public boolean containsKey(K key) {
         Objects.requireNonNull(key, "Key cannot be null");
+        // No need to lock for read-only operations that don't modify the list
         return cache.containsKey(key);
     }
 

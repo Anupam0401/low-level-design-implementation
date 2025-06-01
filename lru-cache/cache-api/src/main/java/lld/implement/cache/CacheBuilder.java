@@ -1,11 +1,14 @@
 package lld.implement.cache;
 
+import java.lang.reflect.Constructor;
+
 /**
  * Fluent builder for creating {@link Cache} instances.
  * All methods return {@code this} for method chaining.
  */
 public final class CacheBuilder<K, V> {
     private int maxSize = 10_000;
+    private int concurrencyLevel = Runtime.getRuntime().availableProcessors() * 2;
 
     /**
      * Set the maximum number of entries in the cache.
@@ -22,16 +25,38 @@ public final class CacheBuilder<K, V> {
     }
 
     /**
+     * Set the concurrency level (number of stripes) for the cache.
+     * Higher values allow more threads to update the cache concurrently
+     * without contention, at the cost of slightly higher memory usage.
+     * 
+     * @param concurrencyLevel must be > 0
+     * @return this builder instance
+     * @throws IllegalArgumentException if concurrencyLevel ≤ 0
+     */
+    public CacheBuilder<K, V> concurrencyLevel(int concurrencyLevel) {
+        if (concurrencyLevel <= 0) {
+            throw new IllegalArgumentException("concurrencyLevel must be positive");
+        }
+        this.concurrencyLevel = concurrencyLevel;
+        return this;
+    }
+    
+    /**
      * Build a new cache instance with the current configuration.
-     * Currently, returns a dummy implementation that throws UnsupportedOperationException.
+     * 
+     * @return a new {@link Cache} instance
+     * @throws IllegalStateException if the cache implementation cannot be created
      */
     public Cache<K, V> build() {
-        return new Cache<>() {
-            @Override public V get(K key) { throw new UnsupportedOperationException("Not implemented yet"); }
-            @Override public V put(K key, V value) { throw new UnsupportedOperationException("Not implemented yet"); }
-            @Override public V remove(K key) { throw new UnsupportedOperationException("Not implemented yet"); }
-            @Override public boolean containsKey(K key) { throw new UnsupportedOperationException("Not implemented yet"); }
-            @Override public long size() { return 0; }
-        };
+        try {
+            // Use reflection to create the LruCache instance without direct dependency
+            Class<?> lruCacheClass = Class.forName("lld.implement.cache.core.LruCache");
+            Constructor<?> constructor = lruCacheClass.getConstructor(int.class, int.class);
+            @SuppressWarnings("unchecked")
+            Cache<K, V> cache = (Cache<K, V>) constructor.newInstance(maxSize, concurrencyLevel);
+            return cache;
+        } catch (Exception e) {
+            throw new IllegalStateException("Failed to create cache instance", e);
+        }
     }
 }

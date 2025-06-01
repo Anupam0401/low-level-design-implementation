@@ -2,7 +2,7 @@ package lld.implement.cache;
 
 /**
  * Intrusive doubly-linked list for LRU ordering.
- * Not thread-safe; external synchronization required.
+ * Thread-safe implementation with internal synchronization.
  */
 public class DoublyLinkedList<K, V> {
     private final Node<K, V> head;
@@ -15,19 +15,37 @@ public class DoublyLinkedList<K, V> {
         tail.prev = head;
     }
 
-    public void moveToHead(Node<K, V> node) {
+    /**
+     * Moves the given node to the head of the list.
+     * This operation is atomic and thread-safe.
+     * 
+     * @param node the node to move to the head
+     */
+    public synchronized void moveToHead(Node<K, V> node) {
         remove(node);
         addFirst(node);
     }
 
-    public void addFirst(Node<K, V> node) {
+    /**
+     * Adds a node to the head of the list.
+     * This operation is atomic and thread-safe.
+     * 
+     * @param node the node to add
+     */
+    public synchronized void addFirst(Node<K, V> node) {
         node.next = head.next;
         node.prev = head;
         head.next.prev = node;
         head.next = node;
     }
 
-    public Node<K, V> removeLast() {
+    /**
+     * Removes and returns the last node in the list.
+     * This operation is atomic and thread-safe.
+     * 
+     * @return the removed node, or null if the list is empty
+     */
+    public synchronized Node<K, V> removeLast() {
         if (tail.prev == head) {
             return null; // empty
         }
@@ -36,7 +54,13 @@ public class DoublyLinkedList<K, V> {
         return last;
     }
 
-    public void remove(Node<K, V> node) {
+    /**
+     * Removes a node from the list.
+     * This operation is atomic and thread-safe.
+     * 
+     * @param node the node to remove
+     */
+    public synchronized void remove(Node<K, V> node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
     }
