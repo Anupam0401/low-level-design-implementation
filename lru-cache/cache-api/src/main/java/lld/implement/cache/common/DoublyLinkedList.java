@@ -1,4 +1,4 @@
-package lld.implement.cache;
+package lld.implement.cache.common;
 
 /**
  * Intrusive doubly-linked list for LRU ordering.
@@ -63,5 +63,24 @@ public class DoublyLinkedList<K, V> {
     public synchronized void remove(Node<K, V> node) {
         node.prev.next = node.next;
         node.next.prev = node.prev;
+    }
+    
+    /**
+     * Returns the last node in the list without removing it.
+     * This operation is atomic and thread-safe.
+     * 
+     * @return the last node, or null if the list is empty
+     */
+    public synchronized Node<K, V> getLast() {
+        return tail.prev == head ? null : tail.prev;
+    }
+    
+    /**
+     * Clears the list, removing all nodes.
+     * This operation is atomic and thread-safe.
+     */
+    public synchronized void clear() {
+        head.next = tail;
+        tail.prev = head;
     }
 }

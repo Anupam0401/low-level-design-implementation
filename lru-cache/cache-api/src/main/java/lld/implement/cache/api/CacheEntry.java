@@ -1,12 +1,14 @@
-package lld.implement.cache.core;
+package lld.implement.cache.api;
 
 /**
  * An immutable record representing a cache entry with key and value.
  * This record is used for operations that need to return both key and value,
  * such as eviction listeners or iteration.
  *
- * @param <K> the type of keys maintained by this cache
+ * @param <K> the type of keys maintained by the cache
  * @param <V> the type of mapped values
+ * @param key the key
+ * @param value the value
  */
 public record CacheEntry<K, V>(K key, V value) {
     /**

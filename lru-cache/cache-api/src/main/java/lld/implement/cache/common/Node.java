@@ -1,4 +1,4 @@
-package lld.implement.cache;
+package lld.implement.cache.common;
 
 /**
  * Internal node for the doubly-linked list used in LRU cache.

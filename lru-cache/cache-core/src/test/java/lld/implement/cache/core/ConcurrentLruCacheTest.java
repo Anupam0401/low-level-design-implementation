@@ -12,10 +12,11 @@ import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import lld.implement.cache.Cache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import lld.implement.cache.api.Cache;
 
 /**
  * Concurrency tests for {@link LruCache}.
