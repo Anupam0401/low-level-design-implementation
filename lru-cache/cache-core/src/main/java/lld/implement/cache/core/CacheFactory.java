@@ -1,11 +1,11 @@
 package lld.implement.cache.core;
 
 import lld.implement.cache.api.Cache;
-import lld.implement.cache.util.EvictionPolicy;
+import lld.implement.cache.policy.EvictionPolicyType;
 
 /**
  * Factory for creating cache instances with different eviction policies.
- * 
+ * <p>
  * This factory provides methods to create different types of caches
  * based on the specified eviction policy.
  */
@@ -25,7 +25,7 @@ public final class CacheFactory {
      * @return a new cache instance
      * @throws IllegalArgumentException if maxSize is less than or equal to zero
      */
-    public static <K, V> Cache<K, V> createCache(int maxSize, EvictionPolicy policy) {
+    public static <K, V> Cache<K, V> createCache(int maxSize, EvictionPolicyType policy) {
         if (maxSize <= 0) {
             throw new IllegalArgumentException("Cache size must be positive");
         }

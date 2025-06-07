@@ -1,14 +1,13 @@
-package lld.implement.cache.util;
+package lld.implement.cache.policy;
 
-import lld.implement.cache.core.PolicyBasedCache;
 
 /**
  * Enumeration of cache eviction policies.
- * 
+ * <p>
  * This enum defines the available cache eviction strategies that can be used
- * with the {@link PolicyBasedCache}.
+ * with the {@link CachePolicyFactory}.
  */
-public enum EvictionPolicy {
+public enum EvictionPolicyType {
     /**
      * Least Recently Used policy.
      * Evicts the least recently accessed items first.

@@ -13,29 +13,6 @@ public final class CachePolicyFactory {
     }
     
     /**
-     * Available cache eviction policies.
-     */
-    public enum PolicyType {
-        /**
-         * Least Recently Used policy.
-         * Evicts the least recently accessed items first.
-         */
-        LRU,
-        
-        /**
-         * Least Frequently Used policy.
-         * Evicts the least frequently accessed items first.
-         */
-        LFU,
-        
-        /**
-         * First In First Out policy.
-         * Evicts items in the order they were added, regardless of access patterns.
-         */
-        FIFO
-    }
-    
-    /**
      * Creates a new cache policy of the specified type.
      *
      * @param <K> the type of keys maintained by the policy
@@ -44,7 +21,7 @@ public final class CachePolicyFactory {
      * @return a new cache policy instance
      * @throws IllegalArgumentException if the policy type is not supported
      */
-    public static <K, V> CachePolicy<K, V> create(PolicyType type) {
+    public static <K, V> CachePolicy<K, V> create(EvictionPolicyType type) {
         return switch (type) {
             case LRU -> new LruPolicy<>();
             case LFU -> new LfuPolicy<>();

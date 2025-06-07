@@ -18,7 +18,6 @@
     <modules>
         <module>cache-api</module>
         <module>cache-core</module>
-        <module>cache-policy</module>
         <module>cache-support</module>
         <module>cache-examples</module>
         <module>cache-benchmarks</module>

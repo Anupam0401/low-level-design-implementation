@@ -10,10 +10,10 @@ import lld.implement.cache.common.Node;
 
 /**
  * Least Frequently Used (LFU) cache eviction policy.
- * 
+ * <p>
  * This policy evicts items that are accessed least frequently.
  * If multiple items have the same access frequency, the least recently used among them is evicted.
- * 
+ * </p>
  * This implementation uses a frequency counter for each node and organizes nodes by frequency.
  * Within each frequency bucket, nodes are ordered by access time (LRU order).
  *
